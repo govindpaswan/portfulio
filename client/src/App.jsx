@@ -48,7 +48,7 @@ const AppRoutes = () => {
       <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
       <Route path="/admin/login" element={admin ? <Navigate to="/admin" replace /> : <AdminLogin />} />
       <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<PublicLayout><Home /></PublicLayout>} />
     </Routes>
   );
 };

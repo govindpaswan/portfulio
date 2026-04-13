@@ -45,7 +45,7 @@ export default function Reviews() {
 
   useEffect(() => {
     api.get('/reviews')
-      .then(res => setReviews(res.data))
+      .then(res => setReviews(Array.isArray(res.data) ? res.data : []))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);

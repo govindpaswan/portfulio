@@ -13,7 +13,7 @@ export default function ManageMessages() {
 
   useEffect(() => {
     api.get('/contact')
-      .then(res => setMessages(res.data))
+      .then(res => setMessages(Array.isArray(res.data) ? res.data : []))
       .catch(() => toast.error('Failed to load messages'))
       .finally(() => setLoading(false));
   }, []);

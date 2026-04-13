@@ -34,7 +34,7 @@ export default function ManageReviews() {
 
   useEffect(() => {
     api.get('/reviews')
-      .then(res => setReviews(res.data))
+      .then(res => setReviews(Array.isArray(res.data) ? res.data : []))
       .catch(() => toast.error('Failed to load reviews'))
       .finally(() => setLoading(false));
   }, []);

@@ -17,7 +17,7 @@ export default function ManageEducation() {
 
   useEffect(() => {
     api.get('/education')
-      .then(res => setItems(res.data))
+      .then(res => setItems(Array.isArray(res.data) ? res.data : []))
       .catch(() => toast.error('Failed to load education'))
       .finally(() => setLoading(false));
   }, []);

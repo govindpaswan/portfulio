@@ -19,12 +19,14 @@ export default function AdminOverview() {
       api.get('/reviews'),
       api.get('/contact'),
     ]).then(([p, e, r, c]) => {
-      const msgs = c.data;
-      const reviews = r.data;
+      const msgs = Array.isArray(c.data) ? c.data : [];
+      const reviews = Array.isArray(r.data) ? r.data : [];
+      const projects = Array.isArray(p.data) ? p.data : [];
+      const education = Array.isArray(e.data) ? e.data : [];
       const avg = reviews.length ? (reviews.reduce((a, rv) => a + rv.rating, 0) / reviews.length).toFixed(1) : 0;
       setStats({
-        projects: p.data.length,
-        education: e.data.length,
+        projects: projects.length,
+        education: education.length,
         reviews: reviews.length,
         messages: msgs.length,
         unread: msgs.filter(m => !m.read).length,

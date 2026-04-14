@@ -18,9 +18,20 @@ export default function ManageProjects() {
   const fetchProjects = async () => {
     try {
       const res = await api.get('/projects');
-      setProjects(res.data);
-    } catch { toast.error('Failed to load projects'); }
-    finally { setLoading(false); }
+
+      // ✅ FIX: ensure array
+      const data = res.data;
+      if (Array.isArray(data)) {
+        setProjects(data);
+      } else if (Array.isArray(data.projects)) {
+        setProjects(data.projects);
+      } else {
+        setProjects([]);
+      }
+
+    } catch {
+      toast.error('Failed to load projects');
+    } finally { setLoading(false); }
   };
 
   useEffect(() => { fetchProjects(); }, []);
@@ -83,7 +94,9 @@ export default function ManageProjects() {
         <div className="flex justify-center py-20"><Spinner size="lg" /></div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {projects.map(p => (
+          
+          {/* ✅ FIX: safe map */}
+          {Array.isArray(projects) && projects.map(p => (
             <motion.div
               key={p._id}
               initial={{ opacity: 0, y: 10 }}
@@ -107,17 +120,21 @@ export default function ManageProjects() {
                   </button>
                 </div>
               </div>
+
+              {/* ✅ FIX: techStack safe */}
               <div className="flex flex-wrap gap-1.5">
-                {(p.techStack || []).map(t => (
+                {Array.isArray(p.techStack) && p.techStack.map(t => (
                   <span key={t} className="text-xs px-2 py-0.5 bg-white/[0.04] border border-white/[0.06] text-white/40 rounded-md">{t}</span>
                 ))}
               </div>
+
               <div className="flex gap-3 pt-2 border-t border-white/[0.04]">
                 {p.githubLink && <a href={p.githubLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-white/30 hover:text-primary text-xs transition-colors"><FiGithub size={12} /> GitHub</a>}
                 {p.liveLink && <a href={p.liveLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-white/30 hover:text-primary text-xs transition-colors"><FiExternalLink size={12} /> Live</a>}
               </div>
             </motion.div>
           ))}
+
           {projects.length === 0 && (
             <div className="col-span-2 text-center py-16 text-white/20 font-body">
               No projects yet. Click "Add Project" to get started.
@@ -126,7 +143,7 @@ export default function ManageProjects() {
         </div>
       )}
 
-      {/* Modal */}
+      {/* Modal same as it is */}
       <AnimatePresence>
         {modalOpen && (
           <motion.div

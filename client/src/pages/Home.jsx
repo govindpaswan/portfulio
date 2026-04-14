@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   FiArrowRight, FiDownload, FiGithub, FiLinkedin,
@@ -51,17 +51,6 @@ function useSwipe(onSwipeLeft, onSwipeRight) {
   return { onTouchStart, onTouchEnd };
 }
 
-/* ── Star rating ── */
-function Stars({ rating, size = 14 }) {
-  return (
-    <div className="flex gap-0.5">
-      {[1,2,3,4,5].map(s => (
-        <FiStar key={s} size={size} style={s <= rating ? { color: '#f59e0b', fill: '#f59e0b' } : { color: 'rgba(255,255,255,0.15)' }} />
-      ))}
-    </div>
-  );
-}
-
 /* ═══════════════════════════════ HERO ═══════════════════════════════ */
 function HeroSection() {
   return (
@@ -94,7 +83,27 @@ function HeroSection() {
               <a href="#contact" className="btn-outline">Let's Talk</a>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.6 }} className="mt-8 flex items-center gap-4">
+            {/* Stats row */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55 }} className="mt-10 flex flex-wrap gap-4">
+              {[
+                { value: '10+', label: 'Projects', icon: '🚀' },
+                { value: '1yr', label: 'Experience', icon: '💼' },
+                { value: '4.7★', label: 'Avg Rating', icon: '⭐' },
+                { value: '100%', label: 'Satisfaction', icon: '✅' },
+              ].map(({ value, label, icon }, i) => (
+                <motion.div key={label} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6 + i * 0.07 }}
+                  className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <span className="text-lg">{icon}</span>
+                  <div>
+                    <p className="font-display font-bold text-white text-base leading-tight">{value}</p>
+                    <p className="text-white/35 font-body text-xs">{label}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.75 }} className="mt-6 flex items-center gap-4">
               <span className="text-white/20 text-xs font-body">Follow me</span>
               <div className="h-px w-8 bg-white/10" />
               {[{ icon: FiGithub, href: 'https://github.com/paswangovind680' }, { icon: FiLinkedin, href: 'https://linkedin.com' }].map(({ icon: Icon, href }, i) => (
@@ -108,38 +117,21 @@ function HeroSection() {
           {/* Right — photo */}
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="flex justify-center items-center">
             <div className="relative">
-              {/* Glow ring */}
               <div className="absolute inset-0 rounded-3xl blur-2xl" style={{ background: 'radial-gradient(ellipse, rgba(0,212,255,0.15), transparent 70%)' }} />
-              {/* Photo */}
-              <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-3xl overflow-hidden" style={{ border: '2px solid rgba(0,212,255,0.2)' }}>
+              <div className="relative w-72 h-80 md:w-80 md:h-[360px] rounded-3xl overflow-hidden" style={{ border: '2px solid rgba(0,212,255,0.2)' }}>
                 <img src={govindPhoto} alt="Govind Paswan" className="w-full h-full object-cover object-top" />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,10,20,0.6) 0%, transparent 60%)' }} />
+                <div className="absolute bottom-4 left-4 right-4 text-center">
+                  <p className="font-display font-bold text-white text-lg">Govind Paswan</p>
+                  <p className="font-body text-xs" style={{ color: 'rgba(0,212,255,0.8)' }}>Full-Stack Developer</p>
+                </div>
               </div>
-              {/* Floating stats */}
-              {[{ label: 'Projects', value: '10+', pos: '-left-10 top-8' }, { label: 'Experience', value: '1yr', pos: '-right-10 bottom-12' }].map(({ label, value, pos }) => (
-                <motion.div key={label} animate={{ y: [0, -8, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} className={`absolute ${pos} bg-surface-card border border-white/10 rounded-xl px-4 py-3 shadow-2xl`}>
-                  <p className="text-primary font-display font-bold text-xl">{value}</p>
-                  <p className="text-white/40 font-body text-xs">{label}</p>
-                </motion.div>
-              ))}
               <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 3, repeat: Infinity }} className="absolute -top-4 -right-4 w-10 h-10 bg-primary/20 border border-primary/30 rounded-full flex items-center justify-center">
                 <HiSparkles className="text-primary text-lg" />
               </motion.div>
             </div>
           </motion.div>
         </div>
-
-        {/* Tech badge strip */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.7 }} className="mt-16 pt-10 border-t border-white/[0.04]">
-          <p className="text-white/20 text-xs font-body uppercase tracking-widest text-center mb-6">Tech Stack</p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {['React', 'Node.js', 'MongoDB', 'Express', 'SQL', 'JavaScript', 'TypeScript', 'Tailwind'].map((tech, i) => (
-              <motion.span key={tech} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.8 + i * 0.05 }} className="px-4 py-1.5 bg-white/[0.04] border border-white/[0.06] rounded-full text-white/40 font-body text-sm hover:text-primary/70 hover:border-primary/20 transition-all cursor-default">
-                {tech}
-              </motion.span>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </div>
   );
@@ -345,117 +337,122 @@ function ReviewsSection({ reviews, loading }) {
   const next = useCallback(() => setIdx(p => (p + 1) % data.length), [data.length]);
   const prev = useCallback(() => setIdx(p => (p - 1 + data.length) % data.length), [data.length]);
   const swipe = useSwipe(next, prev);
-  const avg = (data.reduce((a, r) => a + r.rating, 0) / data.length).toFixed(1);
 
   useEffect(() => {
-    autoRef.current = setInterval(next, 4500);
+    autoRef.current = setInterval(next, 4000);
     return () => clearInterval(autoRef.current);
   }, [next]);
 
-  const resetAuto = () => { clearInterval(autoRef.current); autoRef.current = setInterval(next, 4500); };
+  const resetAuto = () => { clearInterval(autoRef.current); autoRef.current = setInterval(next, 4000); };
 
   return (
-    <section id="reviews" className="py-28 relative overflow-hidden" style={{ background: '#0a0a14' }}>
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full blur-[120px] opacity-10" style={{ background: '#00d4ff' }} />
-      </div>
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="reviews" className="py-24 relative overflow-hidden" style={{ background: '#0a0a14' }}>
+      {/* Ambient glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[200px] rounded-full blur-[120px] opacity-8 pointer-events-none" style={{ background: '#00d4ff' }} />
+
+      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-14">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-5" style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)' }}>
+        <div className="text-center mb-12">
+          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-5" style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)' }}>
             <FiStar size={12} style={{ color: '#00d4ff' }} />
             <span className="font-display font-semibold text-xs tracking-widest uppercase" style={{ color: '#00d4ff' }}>Testimonials</span>
           </motion.div>
-          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="font-display font-bold text-4xl md:text-5xl text-white mb-4">What People Say</motion.h2>
+          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.05 }} className="font-display font-bold text-4xl md:text-5xl text-white">What People Say</motion.h2>
         </div>
 
-        {/* Stats */}
-        <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex flex-wrap justify-center gap-4 mb-14">
-          {[{ value: data.length + '+', label: 'Happy Clients', e: '🤝' }, { value: avg + ' ★', label: 'Avg Rating', e: '⭐' }, { value: '100%', label: 'Satisfaction', e: '✅' }].map(({ value, label, e }) => (
-            <div key={label} className="flex items-center gap-3 px-5 py-3 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <span className="text-xl">{e}</span>
-              <div><p className="font-display font-bold text-xl text-white">{value}</p><p className="font-body text-xs text-white/30">{label}</p></div>
-            </div>
-          ))}
-        </motion.div>
-
         {loading ? <div className="flex justify-center py-20"><Spinner size="lg" /></div> : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* LEFT — Big featured card */}
-            <div className="lg:col-span-5">
-              <div {...swipe}>
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -40 }}
-                    transition={{ duration: 0.38, ease: 'easeInOut' }}
-                    className="relative rounded-3xl p-7 overflow-hidden"
-                    style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.07) 0%, rgba(139,92,246,0.04) 100%)', border: '1px solid rgba(0,212,255,0.15)', minHeight: '280px' }}
-                  >
-                    <div className="absolute -top-3 -left-3 font-display font-bold text-[110px] leading-none select-none pointer-events-none" style={{ color: 'rgba(0,212,255,0.06)' }}>"</div>
-                    <div className="flex gap-0.5 mb-5 relative z-10">
-                      {[1,2,3,4,5].map(s => <FiStar key={s} size={18} style={s <= data[idx].rating ? { color: '#f59e0b', fill: '#f59e0b' } : { color: 'rgba(255,255,255,0.1)' }} />)}
-                    </div>
-                    <p className="font-body text-base text-white/80 leading-relaxed mb-7 relative z-10">"{data[idx].message}"</p>
-                    <div className="flex items-center gap-4 relative z-10">
-                      <div className="w-12 h-12 rounded-full flex items-center justify-center font-display font-bold text-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.2), rgba(139,92,246,0.2))', border: '2px solid rgba(0,212,255,0.25)', color: '#00d4ff' }}>
-                        {data[idx].photo ? <img src={data[idx].photo} alt={data[idx].name} className="w-full h-full rounded-full object-cover" /> : data[idx].name?.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="font-display font-bold text-white">{data[idx].name}</p>
-                        <p className="font-body text-sm" style={{ color: 'rgba(0,212,255,0.7)' }}>{data[idx].designation || 'Client'}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* Controls */}
-              <div className="flex items-center gap-3 mt-5">
-                <button onClick={() => { prev(); resetAuto(); }} className="w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:scale-110" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)' }}><FiChevronLeft size={20} /></button>
-                <div className="flex gap-2 flex-1">
-                  {data.map((_, i) => <button key={i} onClick={() => { setIdx(i); resetAuto(); }} className="h-1 rounded-full flex-1 max-w-8 transition-all duration-400" style={{ background: i === idx ? '#00d4ff' : 'rgba(255,255,255,0.12)' }} />)}
-                </div>
-                <button onClick={() => { next(); resetAuto(); }} className="w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:scale-110" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)' }}><FiChevronRight size={20} /></button>
-              </div>
-              <p className="text-center text-white/20 font-body text-xs mt-2">Swipe to browse</p>
-            </div>
-
-            {/* RIGHT — Review grid */}
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {data.map((review, i) => (
+          <>
+            {/* Main review card */}
+            <div {...swipe}>
+              <AnimatePresence mode="wait">
                 <motion.div
-                  key={review._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.07 }}
-                  onClick={() => { setIdx(i); resetAuto(); }}
-                  className="relative p-5 rounded-2xl cursor-pointer transition-all duration-300"
+                  key={idx}
+                  initial={{ opacity: 0, x: 60, scale: 0.96 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: -60, scale: 0.96 }}
+                  transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="relative rounded-3xl p-8 md:p-10 overflow-hidden mb-6"
                   style={{
-                    background: i === idx ? 'rgba(0,212,255,0.06)' : 'rgba(255,255,255,0.02)',
-                    border: i === idx ? '1px solid rgba(0,212,255,0.2)' : '1px solid rgba(255,255,255,0.05)',
-                    transform: i === idx ? 'scale(1.02)' : 'scale(1)',
+                    background: 'linear-gradient(135deg, rgba(0,212,255,0.07) 0%, rgba(139,92,246,0.05) 100%)',
+                    border: '1px solid rgba(0,212,255,0.18)',
                   }}
                 >
-                  <Stars rating={review.rating} size={12} />
-                  <p className="font-body text-xs text-white/45 leading-relaxed line-clamp-3 my-3">"{review.message}"</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-xs flex-shrink-0" style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.15), rgba(139,92,246,0.15))', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff' }}>
-                      {review.photo ? <img src={review.photo} alt={review.name} className="w-full h-full rounded-full object-cover" /> : review.name?.charAt(0)}
+                  {/* Big decorative quote */}
+                  <div className="absolute -top-4 -left-2 font-display font-black text-[140px] leading-none select-none pointer-events-none" style={{ color: 'rgba(0,212,255,0.05)' }}>"</div>
+
+                  {/* Star rating */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.15, type: 'spring', stiffness: 300 }}
+                    className="flex gap-1 mb-6 relative z-10"
+                  >
+                    {[1,2,3,4,5].map(s => (
+                      <motion.span key={s} initial={{ opacity: 0, rotate: -30 }} animate={{ opacity: 1, rotate: 0 }} transition={{ delay: 0.2 + s * 0.06 }}>
+                        <FiStar size={22} style={s <= data[idx].rating ? { color: '#f59e0b', fill: '#f59e0b' } : { color: 'rgba(255,255,255,0.12)' }} />
+                      </motion.span>
+                    ))}
+                  </motion.div>
+
+                  {/* Quote text */}
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="font-body text-lg md:text-xl text-white/80 leading-relaxed mb-8 relative z-10"
+                  >
+                    "{data[idx].message}"
+                  </motion.p>
+
+                  {/* Author */}
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-center gap-4 relative z-10">
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center font-display font-bold text-xl flex-shrink-0"
+                      style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.25), rgba(139,92,246,0.25))', border: '2px solid rgba(0,212,255,0.3)', color: '#00d4ff' }}>
+                      {data[idx].photo
+                        ? <img src={data[idx].photo} alt={data[idx].name} className="w-full h-full rounded-full object-cover" />
+                        : data[idx].name?.charAt(0)}
                     </div>
-                    <div><p className="font-body font-semibold text-xs text-white/70">{review.name}</p><p className="font-body text-xs text-white/30">{review.designation || 'Client'}</p></div>
-                  </div>
-                  {i === idx && <div className="absolute top-3 right-3 w-2 h-2 rounded-full" style={{ background: '#00d4ff' }} />}
+                    <div>
+                      <p className="font-display font-bold text-white text-lg">{data[idx].name}</p>
+                      <p className="font-body text-sm" style={{ color: 'rgba(0,212,255,0.7)' }}>{data[idx].designation || 'Client'}</p>
+                    </div>
+                    {/* Card number */}
+                    <div className="ml-auto font-display text-xs text-white/15">{idx + 1} / {data.length}</div>
+                  </motion.div>
+
+                  {/* Corner glow */}
+                  <div className="absolute bottom-0 right-0 w-40 h-40 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(0,212,255,0.04)' }} />
                 </motion.div>
-              ))}
+              </AnimatePresence>
             </div>
-          </div>
+
+            {/* Controls */}
+            <div className="flex items-center gap-4">
+              <button onClick={() => { prev(); resetAuto(); }} className="w-11 h-11 rounded-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }}>
+                <FiChevronLeft size={20} />
+              </button>
+
+              {/* Progress dots */}
+              <div className="flex gap-2 flex-1 items-center">
+                {data.map((_, i) => (
+                  <button key={i} onClick={() => { setIdx(i); resetAuto(); }}
+                    className="h-1.5 rounded-full transition-all duration-500 flex-1"
+                    style={{ background: i === idx ? '#00d4ff' : 'rgba(255,255,255,0.12)', maxWidth: i === idx ? '48px' : '16px' }}
+                  />
+                ))}
+              </div>
+
+              <button onClick={() => { next(); resetAuto(); }} className="w-11 h-11 rounded-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }}>
+                <FiChevronRight size={20} />
+              </button>
+            </div>
+            <p className="text-center text-white/15 font-body text-xs mt-3">Auto-changes • Swipe or tap arrows</p>
+          </>
         )}
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-10">
           <Link to="/reviews" className="btn-outline inline-flex items-center gap-2">All Reviews <FiArrowRight size={15} /></Link>
         </div>
       </div>

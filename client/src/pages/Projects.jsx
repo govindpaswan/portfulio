@@ -41,7 +41,7 @@ const fallback = [
 export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState('all');
 
   useEffect(() => {
     api.get('/projects')
@@ -51,8 +51,8 @@ export default function Projects() {
   }, []);
 
   const data = projects.length > 0 ? projects : fallback;
-  const filters = ['all', 'featured'];
-  const filtered = filter === 'featured' ? data.filter(p => p.featured) : data;
+  const filterOptions = ['all', 'featured'];
+  const filtered = activeFilter === 'featured' ? data.filter(p => p.featured) : data;
 
   return (
     <div className="min-h-screen bg-[#0a0a14] pt-24 pb-20">
@@ -65,12 +65,12 @@ export default function Projects() {
 
         {/* Filter tabs */}
         <div className="flex justify-center gap-2 mb-12">
-          {filters.map(f => (
+          {filterOptions.map(f => (
             <button
               key={f}
-              onClick={() => setFilter(f)}
+              onClick={() => setActiveFilter(f)}
               className={`px-5 py-2 rounded-full font-body text-sm font-medium capitalize transition-all duration-200 ${
-                filter === f
+                activeFilter === f
                   ? 'bg-primary/15 text-primary border border-primary/30'
                   : 'text-white/40 border border-white/[0.06] hover:text-white/70 hover:border-white/10'
               }`}

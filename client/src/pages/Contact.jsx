@@ -7,8 +7,8 @@ import Spinner from '../components/Spinner';
 import api from '../utils/api';
 
 const contactInfo = [
-  { icon: FiMail, label: 'Email', value: 'govind@portfolio.com', href: 'mailto:govind@portfolio.com' },
-  { icon: FiPhone, label: 'Phone', value: '+91 98765 43210', href: 'tel:+919876543210' },
+  { icon: FiMail, label: 'Email', value: 'paswangovind680@gmail.com', href: 'mailto:paswangovind680@gmail.com' },
+  { icon: FiPhone, label: 'Phone', value: '+91 73047 85968', href: 'tel:+917304785968' },
   { icon: FiMapPin, label: 'Location', value: 'Turbhe, Navi Mumbai, India', href: null },
 ];
 

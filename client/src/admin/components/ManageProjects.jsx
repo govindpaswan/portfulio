@@ -18,6 +18,7 @@ export default function ManageProjects() {
   const fetchProjects = async () => {
     try {
       const res = await api.get('/projects');
+<<<<<<< HEAD
 
       // ✅ FIX: ensure array
       const data = res.data;
@@ -32,6 +33,11 @@ export default function ManageProjects() {
     } catch {
       toast.error('Failed to load projects');
     } finally { setLoading(false); }
+=======
+      setProjects(Array.isArray(res.data) ? res.data : []);
+    } catch { toast.error('Failed to load projects'); }
+    finally { setLoading(false); }
+>>>>>>> 50373ba (update)
   };
 
   useEffect(() => { fetchProjects(); }, []);

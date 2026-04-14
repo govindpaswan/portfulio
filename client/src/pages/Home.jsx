@@ -38,6 +38,66 @@ const fallbackEducation = [
   { _id: '2', degree: 'HSC — Science', institute: 'Maharashtra State Board', startYear: '2019', endYear: '2021', description: 'Higher Secondary Certificate with focus on Mathematics and Computer Science.' },
 ];
 
+/* ── CountUp hook ── */
+function useCountUp(target, duration, start) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    setCount(0);
+    let startTime = null;
+    const isFloat = target % 1 !== 0;
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = isFloat
+        ? parseFloat((ease * target).toFixed(1))
+        : Math.floor(ease * target);
+      setCount(current);
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [target, duration, start]);
+  return count;
+}
+
+/* ── Animated Stat Card ── */
+function StatCard({ numValue, suffix, label, icon, color, delay }) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); observer.disconnect(); } },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  const count = useCountUp(numValue, 1600, inView);
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, scale: 0.7 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay, type: 'spring', stiffness: 200 }}
+      whileHover={{ y: -4, scale: 1.07 }}
+      className="flex items-center gap-2 px-3.5 py-2 rounded-xl cursor-default"
+      style={{ background: `${color}10`, border: `1px solid ${color}25` }}
+    >
+      <span className="text-base">{icon}</span>
+      <div>
+        <p className="font-display font-bold text-sm text-white leading-tight">
+          {count}{suffix}
+        </p>
+        <p className="font-body text-xs" style={{ color: `${color}99` }}>{label}</p>
+      </div>
+    </motion.div>
+  );
+}
+
 /* ── touch swipe hook ── */
 function useSwipe(onSwipeLeft, onSwipeRight) {
   const startX = useRef(null);
@@ -179,35 +239,17 @@ function HeroSection() {
               </motion.a>
             </motion.div>
 
-            {/* Stats row */}
+            {/* Stats row - animated counters */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.75 }}
               className="flex flex-wrap gap-3 mb-7"
             >
-              {[
-                { value: '10+', label: 'Projects', icon: '🚀', color: '#00d4ff' },
-                { value: '1yr', label: 'Experience', icon: '💼', color: '#a855f7' },
-                { value: '4.7★', label: 'Rating', icon: '⭐', color: '#f59e0b' },
-                { value: '100%', label: 'Satisfaction', icon: '✅', color: '#22c55e' },
-              ].map(({ value, label, icon, color }, i) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, scale: 0.7 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.8 + i * 0.08, type: 'spring', stiffness: 200 }}
-                  whileHover={{ y: -3, scale: 1.05 }}
-                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl cursor-default"
-                  style={{ background: `${color}10`, border: `1px solid ${color}25` }}
-                >
-                  <span className="text-base">{icon}</span>
-                  <div>
-                    <p className="font-display font-bold text-sm text-white leading-tight">{value}</p>
-                    <p className="font-body text-xs" style={{ color: `${color}99` }}>{label}</p>
-                  </div>
-                </motion.div>
-              ))}
+              <StatCard numValue={10}  suffix="+"  label="Projects"    icon="🚀" color="#00d4ff" delay={0.80} />
+              <StatCard numValue={1}   suffix="yr" label="Experience"  icon="💼" color="#a855f7" delay={0.88} />
+              <StatCard numValue={4.7} suffix="★"  label="Rating"      icon="⭐" color="#f59e0b" delay={0.96} />
+              <StatCard numValue={100} suffix="%"  label="Satisfaction" icon="✅" color="#22c55e" delay={1.04} />
             </motion.div>
 
             {/* Social */}

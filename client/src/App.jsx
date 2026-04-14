@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -20,7 +21,7 @@ const ProtectedRoute = ({ children }) => {
   const { admin, loading } = useAuth();
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0a0a14' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--bg-1)' }}>
         <Spinner />
       </div>
     );
@@ -28,13 +29,22 @@ const ProtectedRoute = ({ children }) => {
   return admin ? children : <Navigate to="/admin/login" replace />;
 };
 
-const PublicLayout = ({ children }) => (
-  <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#0a0a14' }}>
-    <Navbar />
-    <main style={{ flex: 1 }}>{children}</main>
-    <Footer />
-  </div>
-);
+const PublicLayout = ({ children }) => {
+  const { isDark } = useTheme();
+  return (
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: isDark ? '#0a0a14' : '#f0f3ff',
+      transition: 'background-color 0.35s ease',
+    }}>
+      <Navbar />
+      <main style={{ flex: 1 }}>{children}</main>
+      <Footer />
+    </div>
+  );
+};
 
 const AppRoutes = () => {
   const { admin } = useAuth();
@@ -56,23 +66,25 @@ const AppRoutes = () => {
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: '#161626',
-              color: '#fff',
-              border: '1px solid rgba(0,212,255,0.2)',
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: '14px',
-            },
-            success: { iconTheme: { primary: '#00d4ff', secondary: '#000' } },
-            error: { iconTheme: { primary: '#ef4444', secondary: '#000' } },
-          }}
-        />
-        <AppRoutes />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: '#161626',
+                color: '#fff',
+                border: '1px solid rgba(0,212,255,0.2)',
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: '14px',
+              },
+              success: { iconTheme: { primary: '#00d4ff', secondary: '#000' } },
+              error: { iconTheme: { primary: '#ef4444', secondary: '#000' } },
+            }}
+          />
+          <AppRoutes />
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

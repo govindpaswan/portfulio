@@ -12,15 +12,23 @@ import toast from 'react-hot-toast';
 import api from '../utils/api';
 import Spinner from '../components/Spinner';
 import govindPhoto from '../assets/govind.png';
+import { useTheme } from '../context/ThemeContext';
 
 /* ─── constants ─── */
+const DEVICON = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
 const techSkills = [
-  { name: 'React', icon: '⚛️' }, { name: 'Node.js', icon: '🟩' },
-  { name: 'MongoDB', icon: '🍃' }, { name: 'Express', icon: '🚂' },
-  { name: 'JavaScript', icon: '🟨' }, { name: 'TypeScript', icon: '🔷' },
-  { name: 'Redux', icon: '🔮' }, { name: 'Socket.io', icon: '🔌' },
-  { name: 'MySQL', icon: '🐬' }, { name: 'Tailwind', icon: '🎨' },
-  { name: 'Git', icon: '🐙' }, { name: 'REST API', icon: '🔗' },
+  { name: 'React',      logo: `${DEVICON}/react/react-original.svg`,            dark: false },
+  { name: 'Node.js',    logo: `${DEVICON}/nodejs/nodejs-original.svg`,          dark: false },
+  { name: 'MongoDB',    logo: `${DEVICON}/mongodb/mongodb-original.svg`,        dark: false },
+  { name: 'Express',    logo: `${DEVICON}/express/express-original.svg`,        dark: true  },
+  { name: 'JavaScript', logo: `${DEVICON}/javascript/javascript-original.svg`,  dark: false },
+  { name: 'TypeScript', logo: `${DEVICON}/typescript/typescript-original.svg`,  dark: false },
+  { name: 'Redux',      logo: `${DEVICON}/redux/redux-original.svg`,            dark: false },
+  { name: 'Socket.io',  logo: `${DEVICON}/socketio/socketio-original.svg`,      dark: true  },
+  { name: 'MySQL',      logo: `${DEVICON}/mysql/mysql-original.svg`,            dark: false },
+  { name: 'Tailwind',   logo: `${DEVICON}/tailwindcss/tailwindcss-original.svg`,dark: false },
+  { name: 'Git',        logo: `${DEVICON}/git/git-original.svg`,                dark: false },
+  { name: 'Vite',       logo: `${DEVICON}/vitejs/vitejs-original.svg`,          dark: false },
 ];
 
 const fallbackProjects = [
@@ -140,7 +148,7 @@ function HeroSection() {
   }, [displayed, typing, roleIdx]);
 
   return (
-    <div className="relative min-h-screen flex items-center overflow-hidden bg-[#0a0a14]">
+    <div className="relative min-h-screen flex items-center overflow-hidden" style={{ background: 'var(--bg-1)', transition: 'background 0.35s' }}>
       {/* Animated background grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-100" />
 
@@ -315,29 +323,50 @@ function HeroSection() {
 
 /* ═══════════════════════════════ SKILLS MARQUEE ═══════════════════════════════ */
 function SkillsMarquee() {
+  const { isDark } = useTheme();
   const doubled = [...techSkills, ...techSkills];
+
+  const sectionBg   = isDark ? '#0d0d1a' : '#e8ecff';
+  const fadeBg1     = isDark ? '#0d0d1a' : '#e8ecff';
+  const cardBg1     = isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.7)';
+  const cardBorder1 = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)';
+  const cardBg2     = isDark ? 'rgba(0,212,255,0.03)'   : 'rgba(0,212,255,0.07)';
+  const cardBorder2 = isDark ? 'rgba(0,212,255,0.08)'   : 'rgba(0,212,255,0.2)';
+  const textColor1  = isDark ? 'rgba(255,255,255,0.6)'  : 'rgba(13,13,26,0.7)';
+  const textColor2  = isDark ? 'rgba(0,212,255,0.5)'    : 'rgba(0,150,180,0.8)';
+  const labelColor  = isDark ? 'rgba(255,255,255,0.2)'  : 'rgba(13,13,26,0.3)';
+  const borderColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+
   return (
-    <section className="py-16 overflow-hidden" style={{ background: '#0d0d1a', borderTop: '1px solid rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+    <section
+      className="py-16 overflow-hidden"
+      style={{ background: sectionBg, borderTop: `1px solid ${borderColor}`, borderBottom: `1px solid ${borderColor}`, transition: 'background 0.35s' }}
+    >
       <div className="text-center mb-8">
-        <span className="font-body text-xs uppercase tracking-widest text-white/20">Skills & Technologies</span>
+        <span className="font-body text-xs uppercase tracking-widest" style={{ color: labelColor }}>Skills & Technologies</span>
       </div>
       <div className="relative">
-        {/* Left fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 z-10" style={{ background: 'linear-gradient(to right, #0d0d1a, transparent)' }} />
-        {/* Right fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-24 z-10" style={{ background: 'linear-gradient(to left, #0d0d1a, transparent)' }} />
+        {/* Fades */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 z-10" style={{ background: `linear-gradient(to right, ${fadeBg1}, transparent)` }} />
+        <div className="absolute right-0 top-0 bottom-0 w-24 z-10" style={{ background: `linear-gradient(to left, ${fadeBg1}, transparent)` }} />
 
         {/* Track 1 — left to right */}
         <motion.div
           animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
           className="flex gap-4 mb-4"
           style={{ width: 'max-content' }}
         >
           {doubled.map((skill, i) => (
-            <div key={i} className="flex items-center gap-2.5 px-5 py-3 rounded-xl flex-shrink-0" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <span className="text-xl">{skill.icon}</span>
-              <span className="font-body font-medium text-sm text-white/60 whitespace-nowrap">{skill.name}</span>
+            <div key={i} className="flex items-center gap-2.5 px-5 py-3 rounded-xl flex-shrink-0"
+              style={{ background: cardBg1, border: `1px solid ${cardBorder1}`, transition: 'all 0.3s' }}>
+              <img
+                src={skill.logo}
+                alt={skill.name}
+                className={skill.dark && isDark ? 'logo-needs-invert' : ''}
+                style={{ width: 22, height: 22, objectFit: 'contain' }}
+              />
+              <span className="font-body font-medium text-sm whitespace-nowrap" style={{ color: textColor1 }}>{skill.name}</span>
             </div>
           ))}
         </motion.div>
@@ -345,14 +374,20 @@ function SkillsMarquee() {
         {/* Track 2 — right to left */}
         <motion.div
           animate={{ x: ['-50%', '0%'] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
           className="flex gap-4"
           style={{ width: 'max-content' }}
         >
           {[...doubled].reverse().map((skill, i) => (
-            <div key={i} className="flex items-center gap-2.5 px-5 py-3 rounded-xl flex-shrink-0" style={{ background: 'rgba(0,212,255,0.03)', border: '1px solid rgba(0,212,255,0.08)' }}>
-              <span className="text-xl">{skill.icon}</span>
-              <span className="font-body font-medium text-sm whitespace-nowrap" style={{ color: 'rgba(0,212,255,0.5)' }}>{skill.name}</span>
+            <div key={i} className="flex items-center gap-2.5 px-5 py-3 rounded-xl flex-shrink-0"
+              style={{ background: cardBg2, border: `1px solid ${cardBorder2}`, transition: 'all 0.3s' }}>
+              <img
+                src={skill.logo}
+                alt={skill.name}
+                className={skill.dark && isDark ? 'logo-needs-invert' : ''}
+                style={{ width: 22, height: 22, objectFit: 'contain' }}
+              />
+              <span className="font-body font-medium text-sm whitespace-nowrap" style={{ color: textColor2 }}>{skill.name}</span>
             </div>
           ))}
         </motion.div>
@@ -363,6 +398,7 @@ function SkillsMarquee() {
 
 /* ═══════════════════════════════ PROJECTS CAROUSEL ═══════════════════════════════ */
 function ProjectsSection({ projects, loading }) {
+  const { isDark } = useTheme();
   const data = projects.length > 0 ? projects : fallbackProjects;
   const [idx, setIdx] = useState(0);
   const autoRef = useRef(null);
@@ -378,7 +414,7 @@ function ProjectsSection({ projects, loading }) {
   const resetAuto = () => { clearInterval(autoRef.current); autoRef.current = setInterval(next, 5000); };
 
   return (
-    <section id="projects" className="py-24 bg-[#0a0a14]">
+    <section id="projects" className="py-24" style={{ background: 'var(--bg-1)', transition: 'background 0.35s' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-14">
@@ -468,9 +504,10 @@ function ProjectsSection({ projects, loading }) {
 
 /* ═══════════════════════════════ EDUCATION ═══════════════════════════════ */
 function EducationSection({ education, loading }) {
+  const { isDark } = useTheme();
   const data = education.length > 0 ? education : fallbackEducation;
   return (
-    <section id="education" className="py-24" style={{ background: '#0d0d1a' }}>
+    <section id="education" className="py-24" style={{ background: 'var(--bg-2)', transition: 'background 0.35s' }}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="inline-block px-4 py-1.5 rounded-full text-xs font-display font-semibold tracking-widest uppercase mb-4" style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff' }}>Education</motion.span>
@@ -507,6 +544,7 @@ function EducationSection({ education, loading }) {
 
 /* ═══════════════════════════════ REVIEWS CAROUSEL ═══════════════════════════════ */
 function ReviewsSection({ reviews, loading }) {
+  const { isDark } = useTheme();
   const data = reviews.length > 0 ? reviews : fallbackReviews;
   const [idx, setIdx] = useState(0);
   const autoRef = useRef(null);
@@ -522,7 +560,7 @@ function ReviewsSection({ reviews, loading }) {
   const resetAuto = () => { clearInterval(autoRef.current); autoRef.current = setInterval(next, 4000); };
 
   return (
-    <section id="reviews" className="py-24 relative overflow-hidden" style={{ background: '#0a0a14' }}>
+    <section id="reviews" className="py-24 relative overflow-hidden" style={{ background: 'var(--bg-1)', transition: 'background 0.35s' }}>
       {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[200px] rounded-full blur-[120px] opacity-8 pointer-events-none" style={{ background: '#00d4ff' }} />
 
@@ -638,6 +676,7 @@ function ReviewsSection({ reviews, loading }) {
 
 /* ═══════════════════════════════ CONTACT ═══════════════════════════════ */
 function ContactSection() {
+  const { isDark } = useTheme();
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -673,7 +712,7 @@ function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="py-24" style={{ background: '#0d0d1a' }}>
+    <section id="contact" className="py-24" style={{ background: 'var(--bg-2)', transition: 'background 0.35s' }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="inline-block px-4 py-1.5 rounded-full text-xs font-display font-semibold tracking-widest uppercase mb-4" style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff' }}>Contact</motion.span>

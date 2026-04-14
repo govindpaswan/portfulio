@@ -52,81 +52,215 @@ function useSwipe(onSwipeLeft, onSwipeRight) {
 }
 
 /* ═══════════════════════════════ HERO ═══════════════════════════════ */
+const roles = ['Full-Stack Developer', 'MERN Stack Expert', 'React Specialist', 'Node.js Developer'];
+
 function HeroSection() {
+  const [roleIdx, setRoleIdx] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [typing, setTyping] = useState(true);
+
+  useEffect(() => {
+    const current = roles[roleIdx];
+    let timeout;
+    if (typing) {
+      if (displayed.length < current.length) {
+        timeout = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 70);
+      } else {
+        timeout = setTimeout(() => setTyping(false), 2000);
+      }
+    } else {
+      if (displayed.length > 0) {
+        timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 40);
+      } else {
+        setRoleIdx(p => (p + 1) % roles.length);
+        setTyping(true);
+      }
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, typing, roleIdx]);
+
   return (
     <div className="relative min-h-screen flex items-center overflow-hidden bg-[#0a0a14]">
+      {/* Animated background grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-100" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Floating orbs */}
+      <motion.div
+        animate={{ x: [0, 30, 0], y: [0, -20, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full blur-3xl pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.07), transparent)' }}
+      />
+      <motion.div
+        animate={{ x: [0, -25, 0], y: [0, 25, 0], scale: [1, 1.15, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full blur-3xl pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.07), transparent)' }}
+      />
+      {/* Top right extra orb */}
+      <motion.div
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        className="absolute top-16 right-16 w-48 h-48 rounded-full blur-2xl pointer-events-none hidden lg:block"
+        style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.05), transparent)' }}
+      />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left */}
           <div>
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full mb-6">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            {/* Available badge */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, type: 'spring', stiffness: 200 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full mb-7"
+            >
+              <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 2, repeat: Infinity }} className="w-2 h-2 rounded-full bg-green-400" />
               <span className="text-green-400 text-xs font-display font-semibold tracking-widest uppercase">Available for Work</span>
             </motion.div>
 
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="font-display font-bold text-5xl md:text-6xl xl:text-7xl text-white leading-[1.05] tracking-tight">
-              Hi, I'm{' '}<span className="text-primary glow-text">Govind</span>
-              <br /><span className="text-white/80">Full-Stack</span>
-              <br /><span className="text-white/40">Developer</span>
-            </motion.h1>
+            {/* Name */}
+            <div className="mb-3">
+              <motion.p
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="text-white/40 font-body text-lg mb-1"
+              >
+                Hi, I'm
+              </motion.p>
+              <motion.h1
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, type: 'spring', stiffness: 100 }}
+                className="font-display font-bold text-6xl md:text-7xl xl:text-8xl leading-[0.95] tracking-tight"
+              >
+                <span className="text-white">Go</span>
+                <span style={{ color: '#00d4ff', textShadow: '0 0 40px rgba(0,212,255,0.4)' }}>vind</span>
+              </motion.h1>
+            </div>
 
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }} className="mt-6 text-white/50 text-lg font-body leading-relaxed max-w-lg">
+            {/* Typewriter role */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex items-center gap-2 mb-6 h-10"
+            >
+              <div className="w-1 h-7 rounded-full" style={{ background: '#00d4ff' }} />
+              <span className="font-display font-bold text-xl md:text-2xl text-white/70">
+                {displayed}
+                <motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.6, repeat: Infinity }} style={{ color: '#00d4ff' }}>|</motion.span>
+              </span>
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="text-white/45 text-base font-body leading-relaxed max-w-md mb-8"
+            >
               I build scalable web apps using the MERN stack. Passionate about clean UI, solid backends, and turning ideas into real products.
             </motion.p>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="mt-8 flex flex-wrap gap-4">
-              <a href="#projects" className="btn-primary group">View My Work <FiArrowRight className="group-hover:translate-x-1 transition-transform" /></a>
-              <a href="#contact" className="btn-outline">Let's Talk</a>
+            {/* CTA buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="flex flex-wrap gap-4 mb-8"
+            >
+              <motion.a href="#projects" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} className="btn-primary group">
+                View My Work <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+              <motion.a href="#contact" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} className="btn-outline">
+                Let's Talk
+              </motion.a>
             </motion.div>
 
             {/* Stats row */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55 }} className="mt-10 flex flex-wrap gap-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.75 }}
+              className="flex flex-wrap gap-3 mb-7"
+            >
               {[
-                { value: '10+', label: 'Projects', icon: '🚀' },
-                { value: '1yr', label: 'Experience', icon: '💼' },
-                { value: '4.7★', label: 'Avg Rating', icon: '⭐' },
-                { value: '100%', label: 'Satisfaction', icon: '✅' },
-              ].map(({ value, label, icon }, i) => (
-                <motion.div key={label} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6 + i * 0.07 }}
-                  className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                  <span className="text-lg">{icon}</span>
+                { value: '10+', label: 'Projects', icon: '🚀', color: '#00d4ff' },
+                { value: '1yr', label: 'Experience', icon: '💼', color: '#a855f7' },
+                { value: '4.7★', label: 'Rating', icon: '⭐', color: '#f59e0b' },
+                { value: '100%', label: 'Satisfaction', icon: '✅', color: '#22c55e' },
+              ].map(({ value, label, icon, color }, i) => (
+                <motion.div
+                  key={label}
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.8 + i * 0.08, type: 'spring', stiffness: 200 }}
+                  whileHover={{ y: -3, scale: 1.05 }}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl cursor-default"
+                  style={{ background: `${color}10`, border: `1px solid ${color}25` }}
+                >
+                  <span className="text-base">{icon}</span>
                   <div>
-                    <p className="font-display font-bold text-white text-base leading-tight">{value}</p>
-                    <p className="text-white/35 font-body text-xs">{label}</p>
+                    <p className="font-display font-bold text-sm text-white leading-tight">{value}</p>
+                    <p className="font-body text-xs" style={{ color: `${color}99` }}>{label}</p>
                   </div>
                 </motion.div>
               ))}
             </motion.div>
 
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.75 }} className="mt-6 flex items-center gap-4">
+            {/* Social */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }} className="flex items-center gap-4">
               <span className="text-white/20 text-xs font-body">Follow me</span>
               <div className="h-px w-8 bg-white/10" />
               {[{ icon: FiGithub, href: 'https://github.com/paswangovind680' }, { icon: FiLinkedin, href: 'https://linkedin.com' }].map(({ icon: Icon, href }, i) => (
-                <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/30 transition-all">
+                <motion.a key={i} href={href} target="_blank" rel="noopener noreferrer"
+                  whileHover={{ scale: 1.15, y: -2 }}
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.4)' }}>
                   <Icon size={16} />
-                </a>
+                </motion.a>
               ))}
             </motion.div>
           </div>
 
-          {/* Right — photo */}
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="flex justify-center items-center">
+          {/* Right — photo with animated ring */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85, rotate: -3 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 0.9, delay: 0.3, type: 'spring', stiffness: 80 }}
+            className="flex justify-center items-center"
+          >
             <div className="relative">
-              <div className="absolute inset-0 rounded-3xl blur-2xl" style={{ background: 'radial-gradient(ellipse, rgba(0,212,255,0.15), transparent 70%)' }} />
-              <div className="relative w-72 h-80 md:w-80 md:h-[360px] rounded-3xl overflow-hidden" style={{ border: '2px solid rgba(0,212,255,0.2)' }}>
+              {/* Rotating ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                className="absolute -inset-3 rounded-3xl"
+                style={{
+                  background: 'conic-gradient(from 0deg, rgba(0,212,255,0.4), transparent, rgba(139,92,246,0.4), transparent, rgba(0,212,255,0.4))',
+                  filter: 'blur(8px)',
+                }}
+              />
+              {/* Glow */}
+              <div className="absolute inset-0 rounded-3xl blur-xl" style={{ background: 'radial-gradient(ellipse, rgba(0,212,255,0.15), transparent 70%)' }} />
+              {/* Photo */}
+              <div className="relative w-72 h-80 md:w-80 md:h-[380px] rounded-3xl overflow-hidden" style={{ border: '2px solid rgba(0,212,255,0.25)' }}>
                 <img src={govindPhoto} alt="Govind Paswan" className="w-full h-full object-cover object-top" />
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,10,20,0.6) 0%, transparent 60%)' }} />
-                <div className="absolute bottom-4 left-4 right-4 text-center">
-                  <p className="font-display font-bold text-white text-lg">Govind Paswan</p>
-                  <p className="font-body text-xs" style={{ color: 'rgba(0,212,255,0.8)' }}>Full-Stack Developer</p>
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,10,20,0.7) 0%, transparent 55%)' }} />
+                <div className="absolute bottom-5 left-5 right-5">
+                  <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="font-display font-bold text-white text-xl">Govind Paswan</motion.p>
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }} className="font-body text-sm" style={{ color: '#00d4ff' }}>Full-Stack Developer</motion.p>
                 </div>
               </div>
-              <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 3, repeat: Infinity }} className="absolute -top-4 -right-4 w-10 h-10 bg-primary/20 border border-primary/30 rounded-full flex items-center justify-center">
+              {/* Sparkle */}
+              <motion.div
+                animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute -top-4 -right-4 w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(0,212,255,0.2)', border: '1px solid rgba(0,212,255,0.35)' }}
+              >
                 <HiSparkles className="text-primary text-lg" />
               </motion.div>
             </div>
@@ -462,7 +596,7 @@ function ReviewsSection({ reviews, loading }) {
 
 /* ═══════════════════════════════ CONTACT ═══════════════════════════════ */
 function ContactSection() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -485,7 +619,7 @@ function ContactSection() {
     try {
       const res = await api.post('/contact', form);
       toast.success(res.data.message);
-      setForm({ name: '', email: '', subject: '', message: '' });
+      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) { toast.error(err.response?.data?.message || 'Failed to send.'); }
     finally { setLoading(false); }
   };
@@ -530,7 +664,10 @@ function ContactSection() {
                   <div><label className="label">Name *</label><input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Your full name" className={`input-field ${errors.name ? 'border-red-500/50' : ''}`} />{errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}</div>
                   <div><label className="label">Email *</label><input type="email" name="email" value={form.email} onChange={handleChange} placeholder="you@example.com" className={`input-field ${errors.email ? 'border-red-500/50' : ''}`} />{errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}</div>
                 </div>
-                <div><label className="label">Subject</label><input type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="What's this about?" className="input-field" /></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div><label className="label">Phone (optional)</label><input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" className="input-field" /></div>
+                  <div><label className="label">Subject</label><input type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="What's this about?" className="input-field" /></div>
+                </div>
                 <div><label className="label">Message *</label><textarea name="message" value={form.message} onChange={handleChange} placeholder="Tell me about your project..." rows={5} className={`input-field resize-none ${errors.message ? 'border-red-500/50' : ''}`} />{errors.message && <p className="text-red-400 text-xs mt-1">{errors.message}</p>}</div>
                 <button type="submit" disabled={loading} className="btn-primary w-full justify-center disabled:opacity-50">
                   {loading ? <><Spinner size="sm" /> Sending...</> : <><FiSend size={16} /> Send Message</>}

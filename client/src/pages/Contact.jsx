@@ -13,7 +13,7 @@ const contactInfo = [
 ];
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +41,7 @@ export default function Contact() {
     try {
       const res = await api.post('/contact', form);
       toast.success(res.data.message);
-      setForm({ name: '', email: '', subject: '', message: '' });
+      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to send message. Try again.');
     } finally {
@@ -141,16 +141,15 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="label">Subject</label>
-                  <input
-                    type="text"
-                    name="subject"
-                    value={form.subject}
-                    onChange={handleChange}
-                    placeholder="What's this about?"
-                    className="input-field"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="label">Phone (optional)</label>
+                    <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 73047 85968" className="input-field" />
+                  </div>
+                  <div>
+                    <label className="label">Subject</label>
+                    <input type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="What's this about?" className="input-field" />
+                  </div>
                 </div>
 
                 <div>

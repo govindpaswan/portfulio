@@ -13,7 +13,7 @@ const contactLimiter = rateLimit({
 // POST send message (public)
 router.post('/', contactLimiter, async (req, res) => {
   try {
-    const { name, email, subject, message } = req.body;
+    const { name, email, phone, subject, message } = req.body;
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'Name, email, and message are required.' });
     }
@@ -21,7 +21,7 @@ router.post('/', contactLimiter, async (req, res) => {
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'Invalid email address.' });
     }
-    const contact = new Contact({ name, email, subject, message });
+    const contact = new Contact({ name, email, phone: phone || '', subject, message });
     await contact.save();
     res.status(201).json({ message: 'Message sent successfully! I will get back to you soon.' });
   } catch (err) {

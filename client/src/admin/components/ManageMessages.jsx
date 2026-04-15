@@ -84,7 +84,7 @@ export default function ManageMessages() {
       {/* Search */}
       <div className="relative mb-4">
         <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" size={15} />
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name, email, phone..." className="input-field pl-10 pr-10" />
+        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name, email, phone..." className="admin-input pl-10 pr-10" />
         {search && (
           <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white">
             <FiX size={14} />

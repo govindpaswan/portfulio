@@ -4,6 +4,8 @@ import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import { RiCodeSSlashLine } from 'react-icons/ri';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { FiSun, FiMoon } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 
@@ -12,6 +14,7 @@ export default function AdminLogin() {
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

@@ -193,14 +193,14 @@ export default function ManageReviews() {
                     <label className="label">Name *</label>
                     <input
                       name="name" value={form.name} onChange={handleChange}
-                      className="input-field" placeholder="John Doe"
+                      className="admin-input" placeholder="John Doe"
                     />
                   </div>
                   <div>
                     <label className="label">Designation</label>
                     <input
                       name="designation" value={form.designation} onChange={handleChange}
-                      className="input-field" placeholder="CEO, Startup"
+                      className="admin-input" placeholder="CEO, Startup"
                     />
                   </div>
                 </div>
@@ -209,7 +209,7 @@ export default function ManageReviews() {
                   <label className="label">Photo URL (optional)</label>
                   <input
                     name="photo" value={form.photo} onChange={handleChange}
-                    className="input-field" placeholder="https://..."
+                    className="admin-input" placeholder="https://..."
                   />
                 </div>
 
@@ -225,7 +225,7 @@ export default function ManageReviews() {
                   <label className="label">Message *</label>
                   <textarea
                     name="message" value={form.message} onChange={handleChange}
-                    rows={4} className="input-field resize-none"
+                    rows={4} className="admin-input resize-none"
                     placeholder="What did they say about your work..."
                   />
                 </div>

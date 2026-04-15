@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import { FiGrid, FiBook, FiStar, FiMail, FiArrowRight, FiTrendingUp, FiEye, FiMessageSquare, FiUsers, FiActivity } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import api from '../../utils/api';
 import Spinner from '../../components/Spinner';
 
 export default function AdminOverview() {
   const { admin } = useAuth();
+  const { isDark, colors } = useTheme();
   const [stats, setStats] = useState({ projects: 0, education: 0, reviews: 0, messages: 0, unread: 0, avgRating: 0 });
   const [recentMessages, setRecentMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -109,7 +111,7 @@ export default function AdminOverview() {
         <div className="relative flex items-center justify-between flex-wrap gap-4">
           <div>
             <p className="text-white/40 font-body text-sm mb-1">{greeting} 👋</p>
-            <h2 className="font-display font-bold text-white text-2xl">
+            <h2 className="font-display font-bold text-2xl' style={{ color: isDark ? '#fff' : '#0f172a' }}">
               Welcome back, <span style={{ color: '#00d4ff' }}>{admin?.email?.split('@')[0]}</span>
             </h2>
             <p className="text-white/30 font-body text-sm mt-1">Here's what's happening with your portfolio today.</p>

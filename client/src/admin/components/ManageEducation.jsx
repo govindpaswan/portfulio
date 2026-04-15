@@ -118,29 +118,29 @@ export default function ManageEducation() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="label">Degree / Course *</label>
-                  <input name="degree" value={form.degree} onChange={handleChange} className="input-field" placeholder="B.Sc. Computer Science" />
+                  <input name="degree" value={form.degree} onChange={handleChange} className="admin-input" placeholder="B.Sc. Computer Science" />
                 </div>
                 <div>
                   <label className="label">Institute / College *</label>
-                  <input name="institute" value={form.institute} onChange={handleChange} className="input-field" placeholder="University of Mumbai" />
+                  <input name="institute" value={form.institute} onChange={handleChange} className="admin-input" placeholder="University of Mumbai" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="label">Start Year *</label>
-                    <input name="startYear" value={form.startYear} onChange={handleChange} className="input-field" placeholder="2020" />
+                    <input name="startYear" value={form.startYear} onChange={handleChange} className="admin-input" placeholder="2020" />
                   </div>
                   <div>
                     <label className="label">End Year</label>
-                    <input name="endYear" value={form.endYear} onChange={handleChange} className="input-field" placeholder="2024 or Present" />
+                    <input name="endYear" value={form.endYear} onChange={handleChange} className="admin-input" placeholder="2024 or Present" />
                   </div>
                 </div>
                 <div>
                   <label className="label">Description</label>
-                  <textarea name="description" value={form.description} onChange={handleChange} rows={3} className="input-field resize-none" placeholder="Brief description..." />
+                  <textarea name="description" value={form.description} onChange={handleChange} rows={3} className="admin-input resize-none" placeholder="Brief description..." />
                 </div>
                 <div>
                   <label className="label">Order (for sorting)</label>
-                  <input type="number" name="order" value={form.order} onChange={handleChange} className="input-field" placeholder="0" />
+                  <input type="number" name="order" value={form.order} onChange={handleChange} className="admin-input" placeholder="0" />
                 </div>
                 <div className="flex gap-3 pt-2">
                   <button type="button" onClick={() => setModalOpen(false)} className="btn-outline flex-1 justify-center text-sm">Cancel</button>

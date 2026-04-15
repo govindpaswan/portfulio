@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children }) => {
 const PublicLayout = ({ children }) => {
   const { colors } = useTheme();
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: colors.bg1, transition: 'background 0.25s' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: colors.bg1 }}>
       <Navbar />
       <main style={{ flex: 1 }}>{children}</main>
       <Footer />
@@ -39,15 +39,15 @@ const AppRoutes = () => {
   const { admin } = useAuth();
   return (
     <Routes>
-      <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
-      <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+      <Route path="/"          element={<PublicLayout><Home /></PublicLayout>} />
+      <Route path="/about"     element={<PublicLayout><About /></PublicLayout>} />
       <Route path="/education" element={<PublicLayout><Education /></PublicLayout>} />
-      <Route path="/projects" element={<PublicLayout><Projects /></PublicLayout>} />
-      <Route path="/reviews" element={<PublicLayout><Reviews /></PublicLayout>} />
-      <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+      <Route path="/projects"  element={<PublicLayout><Projects /></PublicLayout>} />
+      <Route path="/reviews"   element={<PublicLayout><Reviews /></PublicLayout>} />
+      <Route path="/contact"   element={<PublicLayout><Contact /></PublicLayout>} />
       <Route path="/admin/login" element={admin ? <Navigate to="/admin" replace /> : <AdminLogin />} />
-      <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-      <Route path="*" element={<PublicLayout><Home /></PublicLayout>} />
+      <Route path="/admin/*"     element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+      <Route path="*"            element={<PublicLayout><Home /></PublicLayout>} />
     </Routes>
   );
 };
@@ -57,13 +57,11 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <Toaster position="top-right"
-            toastOptions={{
-              style: { background: '#161626', color: '#fff', border: '1px solid rgba(0,212,255,0.2)', fontFamily: 'DM Sans, sans-serif', fontSize: '14px' },
-              success: { iconTheme: { primary: '#00d4ff', secondary: '#000' } },
-              error: { iconTheme: { primary: '#ef4444', secondary: '#000' } },
-            }}
-          />
+          <Toaster position="top-right" toastOptions={{
+            style: { background: '#161626', color: '#fff', border: '1px solid rgba(0,212,255,0.2)', fontFamily: 'DM Sans', fontSize: '14px' },
+            success: { iconTheme: { primary: '#00d4ff', secondary: '#000' } },
+            error: { iconTheme: { primary: '#ef4444', secondary: '#000' } },
+          }} />
           <AppRoutes />
         </AuthProvider>
       </ThemeProvider>

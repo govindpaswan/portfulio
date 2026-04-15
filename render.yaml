@@ -1,15 +1,15 @@
 services:
   - type: web
-    name: portfolio-backend
+    name: govind-portfolio
     runtime: node
     rootDir: server
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && cd ../client && npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 5000
+        value: 10000
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
@@ -19,4 +19,6 @@ services:
       - key: ADMIN_PASSWORD
         sync: false
       - key: CLIENT_URL
+        sync: false
+      - key: SERVER_URL
         sync: false

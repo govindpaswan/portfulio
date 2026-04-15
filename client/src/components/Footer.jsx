@@ -26,7 +26,7 @@ export default function Footer() {
                 style={{ background: '#00d4ff', boxShadow: '0 0 20px rgba(0,212,255,0.4)' }}>
                 G
               </div>
-              <span className="font-display font-bold text-lg" style={{ color: colors.text }}>
+              <span className="font-display font-bold text-lg" style={{ color: '#ffffff' }}>
                 Govind<span style={{ color: '#00d4ff' }}>Portfolio</span>
               </span>
             </Link>

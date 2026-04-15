@@ -123,7 +123,7 @@ function HeroSection() {
     return () => clearTimeout(t);
   }, [displayed, typing, roleIdx]);
 
-  const heroBg = isDark ? '#0a0a14' : 'linear-gradient(135deg,#f0f4ff 0%,#e6ecff 100%)';
+  const heroBg = isDark ? '#0a0a14' : '#ffffff';
 
   return (
     <div className="relative min-h-screen flex items-center overflow-hidden" style={{ background: heroBg }}>
@@ -148,10 +148,10 @@ function HeroSection() {
 
             <div className="mb-3">
               <motion.p initial={{ opacity:0, x:-30 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.15 }}
-                className="text-lg mb-1 font-body" style={{ color: isDark?'rgba(255,255,255,0.4)':'rgba(13,13,26,0.5)' }}>Hi, I'm</motion.p>
+                className="text-lg mb-1 font-body" style={{ color: isDark?'rgba(255,255,255,0.4)':'#9ca3af' }}>Hi, I'm</motion.p>
               <motion.h1 initial={{ opacity:0, y:40 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.7, delay:0.2, type:'spring', stiffness:100 }}
                 className="font-display font-bold text-6xl md:text-7xl xl:text-8xl leading-[0.95] tracking-tight">
-                <span style={{ color: isDark?'#fff':'#0d0d1a' }}>Go</span>
+                <span style={{ color: isDark?'#fff':'#111827' }}>Go</span>
                 <span style={{ color:'#00d4ff', textShadow:'0 0 40px rgba(0,212,255,0.4)' }}>vind</span>
               </motion.h1>
             </div>
@@ -159,14 +159,14 @@ function HeroSection() {
             <motion.div initial={{ opacity:0, x:-20 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.4 }}
               className="flex items-center gap-2 mb-6 h-10">
               <div className="w-1 h-7 rounded-full" style={{ background:'#00d4ff' }} />
-              <span className="font-display font-bold text-xl md:text-2xl" style={{ color:isDark?'rgba(255,255,255,0.7)':'rgba(13,13,26,0.7)' }}>
+              <span className="font-display font-bold text-xl md:text-2xl" style={{ color:isDark?'rgba(255,255,255,0.7)':'#374151' }}>
                 {displayed}
                 <motion.span animate={{ opacity:[1,0] }} transition={{ duration:0.6, repeat:Infinity }} style={{ color:'#00d4ff' }}>|</motion.span>
               </span>
             </motion.div>
 
             <motion.p initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.5 }}
-              className="text-base font-body leading-relaxed max-w-md mb-8" style={{ color:isDark?'rgba(255,255,255,0.45)':'rgba(13,13,26,0.55)' }}>
+              className="text-base font-body leading-relaxed max-w-md mb-8" style={{ color:isDark?'rgba(255,255,255,0.45)':'#6b7280' }}>
               I build scalable web apps using the MERN stack. Passionate about clean UI, solid backends, and turning ideas into real products.
             </motion.p>
 
@@ -187,11 +187,11 @@ function HeroSection() {
 
             <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:1.1 }} className="flex items-center gap-4">
               <span className="text-xs font-body" style={{ color:isDark?'rgba(255,255,255,0.2)':'rgba(13,13,26,0.3)' }}>Follow me</span>
-              <div className="h-px w-8" style={{ background:isDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.1)' }} />
+              <div className="h-px w-8" style={{ background:isDark?'rgba(255,255,255,0.1)':'#d1d5db' }} />
               {[{ icon:FiGithub, href:'https://github.com/paswangovind680' }, { icon:FiLinkedin, href:'https://linkedin.com' }].map(({ icon:Icon, href }, i) => (
                 <motion.a key={i} href={href} target="_blank" rel="noopener noreferrer" whileHover={{ scale:1.15, y:-2 }}
                   className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
-                  style={{ background:isDark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)', border:`1px solid ${isDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.1)'}`, color:isDark?'rgba(255,255,255,0.4)':'rgba(13,13,26,0.4)' }}>
+                  style={{ background:isDark?'rgba(255,255,255,0.04)':'#f3f4f6', border:`1px solid ${isDark?'rgba(255,255,255,0.1)':'#d1d5db'}`, color:isDark?'rgba(255,255,255,0.4)':'#6b7280' }}>
                   <Icon size={16} />
                 </motion.a>
               ))}
@@ -231,8 +231,8 @@ function HeroSection() {
 function SkillsMarquee() {
   const { isDark, colors } = useTheme();
   const doubled = [...techSkills, ...techSkills];
-  const bg = isDark ? '#0d0d1a' : '#e6ecff';
-  const fade = bg;
+  const bg = isDark ? '#0d0d1a' : '#f8f9fa';
+  const fade = bg;  // Same as bg for smooth fade
   return (
     <section className="py-16 overflow-hidden" style={{ background:bg, borderTop:`1px solid ${colors.border}`, borderBottom:`1px solid ${colors.border}` }}>
       <div className="text-center mb-8">

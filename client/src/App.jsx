@@ -2,43 +2,32 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Spinner from './components/Spinner';
-
 import Home from './pages/Home';
 import About from './pages/About';
 import Education from './pages/Education';
 import Projects from './pages/Projects';
 import Reviews from './pages/Reviews';
 import Contact from './pages/Contact';
-
 import AdminLogin from './admin/AdminLogin';
 import AdminDashboard from './admin/AdminDashboard';
 
 const ProtectedRoute = ({ children }) => {
   const { admin, loading } = useAuth();
-  if (loading) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--bg-1)' }}>
-        <Spinner />
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0a14' }}>
+      <Spinner />
+    </div>
+  );
   return admin ? children : <Navigate to="/admin/login" replace />;
 };
 
 const PublicLayout = ({ children }) => {
-  const { isDark } = useTheme();
+  const { colors } = useTheme();
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      backgroundColor: isDark ? '#0a0a14' : '#f0f3ff',
-      transition: 'background-color 0.35s ease',
-    }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: colors.bg1, transition: 'background 0.25s' }}>
       <Navbar />
       <main style={{ flex: 1 }}>{children}</main>
       <Footer />
@@ -68,16 +57,9 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <Toaster
-            position="top-right"
+          <Toaster position="top-right"
             toastOptions={{
-              style: {
-                background: '#161626',
-                color: '#fff',
-                border: '1px solid rgba(0,212,255,0.2)',
-                fontFamily: 'DM Sans, sans-serif',
-                fontSize: '14px',
-              },
+              style: { background: '#161626', color: '#fff', border: '1px solid rgba(0,212,255,0.2)', fontFamily: 'DM Sans, sans-serif', fontSize: '14px' },
               success: { iconTheme: { primary: '#00d4ff', secondary: '#000' } },
               error: { iconTheme: { primary: '#ef4444', secondary: '#000' } },
             }}

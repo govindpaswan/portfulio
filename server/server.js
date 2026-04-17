@@ -97,3 +97,29 @@ mongoose.connect(process.env.MONGO_URI)
     app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
   })
   .catch(err => { console.error('❌ MongoDB failed:', err.message); process.exit(1); });
+
+// ── DB Cleanup (admin only) ─────────────────────────────────────
+// DELETE /api/admin/cleanup — removes corrupt/empty records
+app.delete('/api/admin/cleanup', auth, async (req, res) => {
+  try {
+    const Project = require('./models/Project');
+    const Review = require('./models/Review');
+    const Education = require('./models/Education');
+    
+    // Delete projects with empty title or description
+    const p = await Project.deleteMany({ $or: [{ title: { $in: ['', null, undefined] } }, { description: { $in: ['', null, undefined] } }] });
+    
+    // Delete reviews with invalid rating or missing name
+    const r = await Review.deleteMany({ $or: [{ name: { $in: ['', null, undefined] } }, { rating: { $not: { $type: 'number' } } }, { rating: { $lt: 1 } }, { rating: { $gt: 5 } }] });
+    
+    // Delete education with empty degree or institute
+    const e = await Education.deleteMany({ $or: [{ degree: { $in: ['', null, undefined] } }, { institute: { $in: ['', null, undefined] } }] });
+    
+    res.json({
+      message: 'Cleanup done!',
+      deleted: { projects: p.deletedCount, reviews: r.deletedCount, education: e.deletedCount }
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Cleanup failed: ' + err.message });
+  }
+});

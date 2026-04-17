@@ -68,13 +68,18 @@ app.use('/api/reviews',   require('./routes/reviews'));
 app.use('/api/contact',   require('./routes/contact'));
 
 // ── Serve frontend in production ──────────────────────────
-if (process.env.NODE_ENV === 'production') {
-  const clientBuild = path.join(__dirname, '../client/dist');
+// Serve frontend - works for both single and separate deploy
+const clientBuild = path.join(__dirname, '../client/dist');
+const fs = require('fs');
+
+if (fs.existsSync(clientBuild)) {
   app.use(express.static(clientBuild));
   app.get(/^(?!\/api|\/uploads).*/, (req, res) => {
     res.sendFile(path.join(clientBuild, 'index.html'));
   });
+  console.log('✅ Serving frontend from', clientBuild);
 } else {
+  console.log('⚠️  No client/dist found - API only mode');
   app.get('/', (req, res) => res.json({ status: 'ok', message: '🚀 Portfolio API running' }));
 }
 

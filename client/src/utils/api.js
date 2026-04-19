@@ -1,19 +1,14 @@
 import axios from 'axios';
 
-// Auto-detect API base URL
-function getApiBase() {
-  // If VITE_API_URL env var is set (for separate deployments)
-  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
-  
-  // In production: same origin, use /api
-  if (import.meta.env.PROD) return '/api';
-  
-  // In development: proxy to localhost:5000
-  return '/api';
-}
+// ── API Base URL ────────────────────────────────────────────
+// .env.production has: VITE_API_URL=https://portfulio-server.onrender.com/api
+// This gets baked into the build at compile time by Vite
+const PRODUCTION_API = 'https://portfulio-server.onrender.com/api';
+
+const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? PRODUCTION_API : '/api');
 
 const api = axios.create({
-  baseURL: getApiBase(),
+  baseURL: API_BASE,
   timeout: 30000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -23,9 +18,9 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('portfolio_admin_token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
-}, (error) => Promise.reject(error));
+});
 
-// Handle auth errors
+// Handle auth errors globally
 api.interceptors.response.use(
   (res) => res,
   (err) => {
